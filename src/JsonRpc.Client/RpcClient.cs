@@ -53,7 +53,7 @@ namespace edjCase.JsonRpc.Client
 			{
 				throw new ArgumentNullException(nameof(request));
 			}
-			return await this.SendAsync<RpcRequest, RpcResponse>(request, route);
+			return await this.SendAsync<RpcRequest, RpcResponse>(request, route).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace edjCase.JsonRpc.Client
 				throw new ArgumentNullException(nameof(requests));
 			}
 			List<RpcRequest> requestList = requests.ToList();
-			return await this.SendAsync<List<RpcRequest>, List<RpcResponse>>(requestList, route);
+			return await this.SendAsync<List<RpcRequest>, List<RpcResponse>>(requestList, route).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -105,10 +105,10 @@ namespace edjCase.JsonRpc.Client
 
 					string rpcRequestJson = JsonConvert.SerializeObject(request, this.JsonSerializerSettings);
 					HttpContent httpContent = new StringContent(rpcRequestJson);
-					HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(route, httpContent);
+					HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(route, httpContent).ConfigureAwait(false);
 					httpResponseMessage.EnsureSuccessStatusCode();
 
-					string responseJson = await httpResponseMessage.Content.ReadAsStringAsync();
+					string responseJson = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
 					try
 					{
